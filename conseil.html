@@ -944,8 +944,17 @@
       v('ds')
     ].join('\n');
     const to = 'Hamza@hmgglobalgroup.com,contact@hmgglobalgroup.com';
-    window.location.href = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
-    document.getElementById('ok').style.display = 'block';
+    const mailto = 'mailto:' + to + '?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    const gmail = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent(to) + '&su=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body);
+    const fullText = subject + '\n\n' + body;
+    window.location.href = mailto;
+    const ok = document.getElementById('ok');
+    ok.style.display = 'block';
+    ok.innerHTML = '<span>Merci. Si votre application mail ne s\'ouvre pas, utilisez un des boutons ci-dessous.</span><span style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px"><a class="btn btn-orange" target="_blank" rel="noopener" href="' + gmail + '">Envoyer avec Gmail</a><button type="button" id="copy-req" class="btn" style="background:#0a1628;color:#fff">Copier la demande</button></span>';
+    document.getElementById('copy-req').addEventListener('click', function(){
+      const btn = this;
+      navigator.clipboard.writeText(fullText).then(() => { btn.textContent = 'Copié ✓'; }, () => { btn.textContent = 'Copie impossible'; });
+    });
   });
   document.querySelectorAll('.path').forEach(b => b.addEventListener('click', () => {
     document.getElementById('sc').selectedIndex = +b.dataset.cat;
